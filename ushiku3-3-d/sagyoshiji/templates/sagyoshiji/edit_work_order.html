@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+
+{% block title %}作業指示票修正{% endblock %}
+
+{% block content %}
+<style>ul{list-style: none;}</style>
+    <h1  class="titles">作業指示票修正: {{ work_order.work_order_number }}</h1>
+    <form method="post">
+        <h2 class="titles">作業指示票情報</h2>  
+        {% csrf_token %}      
+        {% for hidden in form.hidden_fields %}
+            {{ hidden }}
+        {% endfor %}
+        {{ form.as_p }}
+        <h2 class="titles">作業進捗データ</h2>
+        <div style="width:50%;">
+            <div align="center">
+        {{ formset.management_form }}
+        <table>
+            <thead>
+                <tr>
+                    <th>作業日</th>
+                    <th>当日実績</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for form in formset %}
+                <tr>
+                    {% for hidden in form.hidden_fields %}
+                        {{ hidden }}
+                    {% endfor %}
+                    <td>{{ form.work_date }}</td>
+                    <td>{{ form.daily_result }}</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+        </div></div><br><br>
+        <div class="f_el"><div align="right">
+            <a href="{% url 'sagyodenpyo:work_logs' %}" >一覧に戻る</a>　
+            <button type="submit" class="sub_bt" style="padding:10px 20px;">登録</button>
+        </div></div>    </form>
+{% endblock %}
